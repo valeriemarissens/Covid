@@ -1,0 +1,35 @@
+@startuml
+
+class Utilisateur {
+	String login
+	String mdp
+	String nom
+	String prenom
+	Date dateDeNaissance
+	boolean estCovidPositif
+	boolean estARisque
+}
+
+class Activite {
+	Date date
+	int heureDebut
+	int heureFin
+}
+
+class Lieu {
+	String nom
+	String adresse
+}
+
+Activite --"*" Lieu : lieuxAssocies
+Utilisateur --"*" Utilisateur : amis
+Utilisateur --"*" Activite
+
+class Notification {
+	String message
+	Date dateEnvoie
+}
+
+Utilisateur --"*" Notification
+
+@enduml
