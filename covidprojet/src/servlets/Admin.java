@@ -38,7 +38,7 @@ public class Admin extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			response.setHeader("cache-control","no-cache, no-store,must-revalidate");
-		response.setHeader("Expires","0");
+			response.setHeader("Expires","0");
 				
 				String login = request.getParameter("login");
 		        String password = request.getParameter("password");
@@ -52,7 +52,7 @@ public class Admin extends HttpServlet {
 		           	this.getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
 		        }
 		        else{
-		        	String erreur="login ou mot de passe incorrecte";
+		        	String erreur="login ou mot de passe incorrect";
 		        	request.setAttribute("erreur", erreur);
 		    
 		           	this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);

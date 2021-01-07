@@ -6,49 +6,58 @@ public class user {
 	private	String lastname ;
 	private String firstname ;
 	private String birth ;
-	private int hascovid ;
-	private int isatrisk ;
+	private boolean hascovid ;
+	private boolean isatrisk ;
 	
 	
 	
 	public String getlogin() {
 		return login;
 	}
+	
 	public void setuserlogin(String login) {
 		this.login = login;
 	}
+	
 	public String getlastname() {
 		return lastname;
 	}
+	
 	public void setlastname(String lastname) {
 		this.lastname = lastname;
 	}
+	
 	public String getfirstname() {
 		return firstname;
 	}
+	
 	public void setfirstname(String firstname) {
 		this.firstname = firstname;
 	}
 	
+	
 	public String getbirth() {
 		return birth;
 	}
+	
 	public void setbirth(String birth) {
 		this.birth = birth;
 	}
 	
-	public int getcovid() {
-		return hascovid;
+	public String getcovid() {
+		return String.valueOf(hascovid);
 	}
-	public void setcovid(int hascovid) {
+	
+	public void setcovid(boolean hascovid) {
 		this.hascovid = hascovid;
 	}
-	public int risk() {
-		return isatrisk;
+	
+	public String getatrisk() {
+		return String.valueOf(isatrisk);
 	}
-	public void setrisk(int isatrisk) {
-	this.isatrisk = isatrisk;
-		
+	
+	public void setrisk(boolean isatrisk) {
+		this.isatrisk = isatrisk;	
 	}
 
 	

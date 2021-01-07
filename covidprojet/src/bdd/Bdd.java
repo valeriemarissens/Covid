@@ -12,10 +12,6 @@ import java.util.List;
 import beans.user;
 
 
-
-
-
-
 //import beans.user;
 
 public class Bdd {
@@ -23,53 +19,52 @@ public class Bdd {
 	private Connection connexion;
 	
 
-	 private void loadDatabase() {
-	        // Chargement du driver
-	        try {
-	            Class.forName("com.mysql.jdbc.Driver");
-	        } catch (ClassNotFoundException e) {
-	        }
-
-	        try {
-	            connexion = DriverManager.getConnection("jdbc:mysql://localhost/covid", "root", "");
-	            
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
+	private void loadDatabase() {
+	    // Chargement du driver
+	    try {
+	        Class.forName("com.mysql.jdbc.Driver");
 	    }
-		public boolean admin (String login, String password){
-			Statement statement=null;
-			ResultSet rs=null;
-			 loadDatabase();
-			 boolean trouve =false;
-				try {
-					statement = connexion.createStatement();
-					rs = statement.executeQuery("SELECT * FROM users where login='"+login+"' and password='"+password+"'");
-					
-				while(rs.next()) {
-					if(rs.getString("login")!="" && rs.getString("password")!=""){
-						trouve=true;
-					}else{
-						trouve=false;
-					    
-					}
-				}
-			connexion.close();	 
-			 
+	    catch (ClassNotFoundException e) {}
+	
+	    try {
+	        connexion = DriverManager.getConnection("jdbc:mysql://localhost/covid", "root", "");
+	        
+	    }
+	    catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+    }
+	 
+	public boolean admin (String login, String password){
+		Statement statement;
+		ResultSet rs;
+		loadDatabase();
+		boolean trouve =false;
+		
+		try {
+			statement = connexion.createStatement();
+			rs = statement.executeQuery("SELECT * FROM users where login='"+login+"' and password='"+password+"'");
+			
+			while(rs.next()) {
+				if(rs.getString("login")!="" && rs.getString("password")!=""){
+					trouve=true;
+				}else{
+					trouve=false;
+			}
+		}
+		connexion.close();	 
+		 
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-				return trouve;
-		}
+			return trouve;
+	}
 		
 		
 		
 		
-		// retourner la liste des utilisateurs 
-	
-
-		
-		public List<user> getusers(){
+	// retourner la liste des utilisateurs 	
+	public List<user> getusers(){
 		List<user> users = new ArrayList<user>();
 		Statement statement = null;
 		ResultSet rs = null;
@@ -85,18 +80,16 @@ public class Bdd {
 				String lastname = rs.getString("lastname");
 				String firstname = rs.getString("firstname");
 				String birth = rs.getString("birth");
-			//	int hascovid = rs.getInt("hascovid");
-				int isatrisk = rs.getInt("isatrisk");
+				boolean hascovid = rs.getBoolean("hascovid");
+				boolean isatrisk = rs.getBoolean("isatrisk");
 			
-				
 				user user  = new user();
 				user.setuserlogin(login);
 				user.setlastname(lastname);
 				user.setfirstname(firstname);
 				user.setbirth(birth);
-			//	user.setcovid(hascovid);
-				user.setrisk(isatrisk);
-				
+				user.setcovid(hascovid);
+				user.setrisk(isatrisk);			
 				
 				users.add(user);
 				
@@ -116,17 +109,6 @@ public class Bdd {
 		}
 		
 		return users;
-	}
-	
-	
-	
-	
-
-	 
-	
-	
-	
-
-		 
+	}	 
 	 
 }

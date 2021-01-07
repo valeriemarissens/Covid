@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>admin</title>
+<title>Admin</title>
    <link type="text/css" rel="stylesheet" href="css/admin.css" />
     <link type="text/css" rel="stylesheet" href="css/formation1.css" />
    
@@ -37,24 +37,8 @@
       <a class="navbar-brand" href="#" style=" font-style:italic;font-size:30px; color: palevioletred; opacity:0.9; letter-spacing: 4px;">Covid19</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav navbar-right">
-      
-          
-                       
-    
-
-           
-         <li class="selected" onclick="function()" ><a href="Login" style=" font-style:italic;font-size:15px; opacity:0.9;color:white; letter-spacing: 4px;"> DECONNEXION </a></li>
-             
-                 
-        
-         
-      
-         
-        
-        
-        
-       
+      <ul class="nav navbar-nav navbar-right">    
+		<li class="selected" onclick="function()" ><a href="Login" style=" font-style:italic;font-size:15px; opacity:0.9;color:white; letter-spacing: 4px;"> DECONNEXION </a></li>   
       </ul>
     </div>
   </div>
@@ -77,6 +61,8 @@
   <th><c:out value="lastname"/></th>
   <th><c:out value="firstname"/></th>
   <th><c:out value="birthday"/></th>
+  <th><c:out value="has covid ?"/></th>
+  <th><c:out value="is at risk ?"/></th>
   
  
  
@@ -88,9 +74,11 @@
 
 <c:forEach var="user" items="${ users }">   
 <tr>
-  <td><c:out value="${ user.lastname }" /></td>
-  <td><c:out value="${ user.firstname }" /></td>
-  <td><c:out value="${ user.birth }" /></td>
+  <td><c:out value="${ user.getlastname() }" /></td>
+  <td><c:out value="${ user.getfirstname() }" /></td>
+  <td><c:out value="${ user.getbirth() }" /></td>
+  <td><c:out value="${ user.getcovid() }" /></td>
+  <td><c:out value="${ user.getatrisk() }" /></td>
 
  
  
