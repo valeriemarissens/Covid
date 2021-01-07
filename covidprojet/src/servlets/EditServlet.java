@@ -41,14 +41,42 @@ public class EditServlet extends HttpServlet {
 		String nouveauNom = request.getParameter("nouveauNom");
 		String nouveauPrenom = request.getParameter("nouveauPrenom");
 		String nouvelleDateNaissance = request.getParameter("nouvelleDateNaissance");
-		// covid positif ?
+		String positif = request.getParameter("positif");
+		boolean positifBool = (positif == null) ? false : true;
 		
-		if ((nouveauLogin != "") && (nouveauNom != "") && (nouveauPrenom != "") && (nouvelleDateNaissance != "")) {
-			Bdd bdd = Bdd.getInstance();
-			bdd.editUser(nouveauLogin, nouveauNom, nouveauPrenom, nouvelleDateNaissance, false);
-		} 
+		System.out.println(nouveauLogin+", "+nouveauNom+", "+nouveauPrenom+", "+ nouvelleDateNaissance+", "+positifBool+" == "+positif);
 		
-		//response.sendRedirect("WEB-INF/user.jsp");		
+		if ((nouveauLogin != "") && (nouveauNom != "") && (nouveauPrenom != "") && (nouvelleDateNaissance != "") && (positif != "")) {
+			if (areCorrect(nouveauLogin, nouveauNom, nouveauPrenom, nouvelleDateNaissance)) {
+				Bdd bdd = Bdd.getInstance();
+				bdd.editUser(nouveauLogin, nouveauNom, nouveauPrenom, nouvelleDateNaissance, positifBool);
+				this.getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response);
+			}
+			else {
+				String erreur="Veuillez complÈter correctement tous les champs";
+	        	request.setAttribute("erreur", erreur);    
+	           	this.getServletContext().getRequestDispatcher("/WEB-INF/edit.jsp").forward(request, response);
+			}
+		}
+		else{
+        	String erreur="Veuillez complÈter tous les champs";
+        	request.setAttribute("erreur", erreur);    
+           	this.getServletContext().getRequestDispatcher("/WEB-INF/edit.jsp").forward(request, response);
+        }
+	}
+	
+	private boolean areCorrect(String login, String nom, String prenom, String birth) {
+		String regexLogin = "[A-Za-z0-9_]+";
+        String regexNom = "[A-Z][a-zÈ‡Ô‰Îˆ¸Ó‚ÍÙ˚]+";
+		
+		boolean loginCorrect = login.matches(regexLogin);
+		boolean nomCorrect = nom.matches(regexNom);
+		boolean prenomCorrect = prenom.matches(regexNom);
+		boolean birthCorrect = true;
+		
+		System.out.println(loginCorrect +"-"+ nomCorrect +"-"+ prenomCorrect);
+		
+		return loginCorrect && nomCorrect && prenomCorrect && birthCorrect;
 	}
 
 }

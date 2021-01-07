@@ -193,31 +193,42 @@ public class Bdd {
 		return available;
 	}
 	
+	private void updateAtRiskUsers() {
+		//todo
+	}
+	
 	public void editUser(String login, String nom, String prenom, String birth, boolean covidPositive) {
 		Statement statement = null;
 		loadDatabase();
 		
 		try {
 			statement = connexion.createStatement();
-			if ((login != "") && loginAvailable(login)) {
-				statement.executeUpdate("UPDATE 'users' SET login = '"+login+"' WHERE 'users'.'login'='"+login+"'");
+			if ((login != currentUser.getlogin()) && loginAvailable(login)) {
+				statement.executeUpdate("UPDATE users SET login = '"+login+"' WHERE users.login='"+login+"'");
+				currentUser.setuserlogin(login);
 			}
-			if (nom != "") {
-				statement.executeUpdate("UPDATE 'users' SET lastname = '"+nom+"' WHERE 'users'.'login'='"+login+"'");
+			if (nom != currentUser.getlastname()) {
+				statement.executeUpdate("UPDATE users SET lastname = '"+nom+"' WHERE users.login='"+login+"'");
+				currentUser.setlastname(nom);
 			}
-			if (prenom != "") {
-				statement.executeUpdate("UPDATE 'users' SET firstname = '"+prenom+"' WHERE 'users'.'login'='"+login+"'");
+			if (prenom != currentUser.getfirstname()) {
+				statement.executeUpdate("UPDATE users SET firstname = '"+prenom+"' WHERE users.login='"+login+"'");
+				currentUser.setfirstname(prenom);
 			}
-			if (birth != "") {
-				statement.executeUpdate("UPDATE 'users' SET birth = '"+birth+"' WHERE 'users'.'login'='"+login+"'");
+			if (birth != currentUser.getbirth()) {
+				statement.executeUpdate("UPDATE users SET birth = '"+birth+"' WHERE users.login='"+login+"'");
+				currentUser.setbirth(birth);
 			}
-			if (covidPositive) {
-				statement.executeUpdate("UPDATE 'users' SET hascovid = 1 WHERE 'users'.'login'='"+login+"'");
-				// todo : il faut mettre tous les autres à risque
+			boolean isAlreadyPositive = Boolean.parseBoolean(currentUser.getcovid());
+			if (covidPositive && (!isAlreadyPositive)) {
+				statement.executeUpdate("UPDATE users SET hascovid = 1 WHERE users.login='"+login+"'");
+				currentUser.setcovid(covidPositive);
+				this.updateAtRiskUsers();
 			}
-			
-			
-			connexion.close();
+			if (!covidPositive && isAlreadyPositive) {
+				currentUser.setcovid(covidPositive);
+				statement.executeUpdate("UPDATE users SET hascovid = 0 WHERE users.login='"+login+"'");
+			}
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

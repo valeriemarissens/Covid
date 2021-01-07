@@ -90,7 +90,7 @@
 				
 				<div class="form-group">
 					<label for="positif">Se déclarer positif à la covid-19: </label>
-					<button class="btn btn-danger">COVID-19</button>
+					<input type="checkbox" class="form-control" id="positif" name="positif">
 				</div>
 				
 				
@@ -102,7 +102,9 @@
 		<!-- Fin du formulaire de modification -->   	
    	
 	  </div>
-	  <br><br><br><br><br> 
+	  <br><br><br><br><br>
+	  
+	  <h3 style="color:red;">${erreur }</h3>
 	       
 	<footer class="text-center">
 	
