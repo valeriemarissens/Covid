@@ -85,7 +85,7 @@ public class Bdd {
 				String lastname = rs.getString("lastname");
 				String firstname = rs.getString("firstname");
 				String birth = rs.getString("birth");
-			//	int hascovid = rs.getInt("hascovid");
+				int hascovid = rs.getInt("hascovid");
 				int isatrisk = rs.getInt("isatrisk");
 			
 				
@@ -94,7 +94,7 @@ public class Bdd {
 				user.setlastname(lastname);
 				user.setfirstname(firstname);
 				user.setbirth(birth);
-			//	user.setcovid(hascovid);
+				user.setcovid(hascovid);
 				user.setrisk(isatrisk);
 				
 				

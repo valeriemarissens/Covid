@@ -78,8 +78,7 @@
   <th><c:out value="firstname"/></th>
   <th><c:out value="birthday"/></th>
   
- 
- 
+  
   <th><c:out value="Modifier"/></th>
   <th><c:out value="Supprimer"/></th>
  
@@ -93,7 +92,7 @@
   <td><c:out value="${ user.birth }" /></td>
 
  
- 
+
 
  <td> 
  <a class="glyphicon glyphicon-pencil" href="modifier?userlogin=<c:out value="${user.login }"/>"></a></td>
