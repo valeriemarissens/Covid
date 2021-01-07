@@ -1,6 +1,6 @@
 package beans;
 
-public class user {
+public class User {
 	
 	private	String login;
 	private	String lastname ;
@@ -8,7 +8,6 @@ public class user {
 	private String birth ;
 	private boolean hascovid ;
 	private boolean isatrisk ;
-	
 	
 	
 	public String getlogin() {
