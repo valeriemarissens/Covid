@@ -1,0 +1,145 @@
+      
+      body{
+        background-color: #fff;
+      }
+      
+      
+      .bg-1 {
+    background: #2d2d30;
+    color: #bdbdbd;
+}
+.bg-1 h3 {color: #fff;}
+.bg-1 p {font-style: italic;}
+      
+      
+      
+      /* Add a dark background color with a little bit see-through */ 
+.navbar {
+    margin-bottom: 0;
+    background-color: #2d2d30;
+    border: 0;
+    font-size: 11px !important;
+    letter-spacing: 4px;
+    opacity:0.9;
+}
+
+/* Add a gray color to all navbar links */
+.navbar li a, .navbar .navbar-brand { 
+/*   color: #d5d5d5 !important;*/
+    color: palevioletred;
+}
+
+/* On hover, the links will turn white */
+
+
+/* The active link */
+.navbar-nav li.active a {
+    color: #fff !important;
+    background-color:#29292c !important;
+}
+
+/* Remove border color from the collapsible button */
+.navbar-default .navbar-toggle {
+    border-color: transparent;
+}
+
+/* Dropdown */
+.open .dropdown-toggle {
+    color: #fff ;
+
+      background-color: palevioletred!important;
+}
+
+/* Dropdown links */
+.dropdown-menu li a {
+    color: #000 !important;
+}
+
+/* On hover, the dropdown links will turn red */
+.dropdown-menu li a:hover {
+    background-color:palevioletred !important;
+}
+  .container {
+      padding: 80px 120px;
+  }
+  
+ 
+  @media (max-width: 600px) {
+    .carousel-caption {
+      display: none; /* Hide the carousel text when the screen is less than 600 pixels wide */
+    }
+  }
+      /* Add a dark background color to the footer */
+footer {
+    background-color: #444;
+    color: #ccc;
+    padding: 32px;
+}
+
+footer a {
+    color: #cccccc;
+}
+
+footer a:hover {
+    color: #777;
+    text-decoration: none;
+}
+      
+      
+      
+      /* Remove rounded borders from list */
+.list-group-item:first-child {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+
+.list-group-item:last-child {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Remove border and add padding to thumbnails */
+.thumbnail {
+    padding: 0 0 15px 0;
+    border: none;
+    border-radius: 0;
+}
+
+.thumbnail p {
+    margin-top: 15px;
+    color: #555;
+}
+
+/* Black buttons with extra padding and without rounded borders */
+.btn {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #f1f1f1;
+    border-radius: 0;
+    transition: .2s;
+}
+
+/* On hover, the color of .btn will transition to white with black text */
+
+      
+      /*essai*/
+       .modal-header, h4, .close {
+      background-color: #333;
+      color: #fff !important;
+      text-align: center;
+      font-size: 30px;
+  }
+  .modal-header, .modal-body {
+      padding: 40px 50px;
+  }
+.err_msg{
+    display: inline-block;
+    background: #f00;
+    color: #fff;
+    font-weight: bold;
+    padding: 5px;
+    width: 200px;
+    text-align: center;
+    border-radius: 5px;
+    border: 2px solid #333;
+}
