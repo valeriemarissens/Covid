@@ -1,6 +1,9 @@
 package servlets;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.util.Calendar;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +18,7 @@ import bdd.Bdd;
 @WebServlet("/EditServlet")
 public class EditServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private String msgErreur = ""; 
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -51,7 +55,7 @@ public class EditServlet extends HttpServlet {
 				this.getServletContext().getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response);
 			}
 			else {
-				String erreur="Veuillez complÈter correctement tous les champs";
+				String erreur="Veuillez complÈter correctement tous les champs : "+msgErreur;
 	        	request.setAttribute("erreur", erreur);    
 	           	this.getServletContext().getRequestDispatcher("/WEB-INF/edit.jsp").forward(request, response);
 			}
@@ -63,6 +67,15 @@ public class EditServlet extends HttpServlet {
         }
 	}
 	
+	/**
+	 * VÈrifie, avec l'utilisation de regexp, que les champs mis sont corrects.
+	 * 
+	 * @param login
+	 * @param nom
+	 * @param prenom
+	 * @param birth
+	 * @return vrai si les champs sont tous corrects.
+	 */
 	private boolean areCorrect(String login, String nom, String prenom, String birth) {
 		String regexLogin = "[A-Za-z0-9_]+";
         String regexNom = "[A-Z][a-zÈ‡Ô‰Îˆ¸Ó‚ÍÙ˚]+";
@@ -70,7 +83,15 @@ public class EditServlet extends HttpServlet {
 		boolean loginCorrect = login.matches(regexLogin);
 		boolean nomCorrect = nom.matches(regexNom);
 		boolean prenomCorrect = prenom.matches(regexNom);
-		boolean birthCorrect = true;
+		
+		Date birthDate = Date.valueOf(birth);
+        java.util.Date today = Calendar.getInstance().getTime();
+        boolean birthCorrect = !birthDate.after(today);
+        
+        if (!loginCorrect) msgErreur = "format de login ";
+        if (!nomCorrect) msgErreur += "format du nom ";
+        if (!prenomCorrect) msgErreur += "format du prÈnom ";
+        if (!birthCorrect) msgErreur += "date de naissance ";
 		
 		return loginCorrect && nomCorrect && prenomCorrect && birthCorrect;
 	}

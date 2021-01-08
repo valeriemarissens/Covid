@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" import="beans.User" %>
+<%@ page pageEncoding="UTF-8" import="beans.User" import="java.util.List" import="bdd.Bdd"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
@@ -63,9 +63,53 @@
 	            <p><c:out value="A risque : "/><% out.print(user.getatrisk()); %></p>
 	        </div>
 	    </div>
-	    <!-- Fin informations -->	 
+	    <!-- Fin informations -->	
+	    
+	  
+	  <br><br>
+	  
+	  <!-- Chercheur -->
+	  <p>
+	  	Chercher des amis : <input type="search" name="chercheAmis" placehorder="Écire le login." pattern ="[A-Za-z0-9_]{1,11}" title="Le login ne comporte que des lettres, chiffres ou tirets bas.">
+	  	<input type="submit" value="Chercher">	  
+	  </p>	  
+	  <!-- Fin du chercheur -->
+	  
+	  
+	  <br><br>
+	  <!-- Amis -->
+	  <h3 style="margin:0;">Liste d'amis :</h3>
+	  <br>
+		<table>
+			<% List<User> friends = Bdd.getInstance().getFriends(); %>
+			
+			<tr>
+				<th><c:out value="login"/></th>
+				<th><c:out value="lastname"/></th>
+				<th><c:out value="firstname"/></th>
+				<th><c:out value="birthday"/></th>
+				<th><c:out value="has covid ?"/></th>
+				<th><c:out value="is at risk ?"/></th>
+			</tr>
+			
+			
+			<c:forEach var="user" items="${ friends }">   
+				<tr>
+				 <td><c:out value="${ user.getlogin() }" /></td>
+				<td><c:out value="${ user.getlastname() }" /></td>
+				<td><c:out value="${ user.getfirstname() }" /></td>
+				<td><c:out value="${ user.getbirth() }" /></td>
+				<td><c:out value="${ user.getcovid() }" /></td>
+				<td><c:out value="${ user.getatrisk() }" /></td>			
+				</tr>
+			</c:forEach>
+		</table>
+    
+    <!-- Fin amis -->
 	    
 	  <br><br><br><br><br> 
+	  
+	  
 	       
 	<footer class="text-center">
 	

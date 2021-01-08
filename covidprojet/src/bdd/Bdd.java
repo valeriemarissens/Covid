@@ -81,6 +81,39 @@ public class Bdd {
 	}
 	
 	/**
+	 * Trouve un user.
+	 * 
+	 * @param login login de l'utilisateur.
+	 * @return
+	 */
+	public boolean findUser (String login){
+		Statement statement;
+		ResultSet rs;
+		loadDatabase();
+		boolean trouve = false;
+		
+		try {
+			statement = connexion.createStatement();
+			rs = statement.executeQuery("SELECT * FROM users where login='"+login+"'");
+			
+			while(rs.next()) {
+				if(rs.getString("login") != ""){
+					trouve = true;
+				}
+				else{
+					trouve = false;
+			}
+		}
+		connexion.close();	 
+		 
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return trouve;
+	}
+	
+	/**
 	 * Met à jour l'utilisateur qui est en ce moment dans le site.
 	 * 
 	 * @param rs résultat de la requête sql.
@@ -300,6 +333,89 @@ public class Bdd {
 		return instance;
 	}
 	 
+	/**
+	 * Ajoute la nouvelle amitié à la bdd.
+	 * 
+	 * @param loginFriend
+	 */
+	public void askFriend(String loginFriend) {
+		// todo :notification : demande, acceptation, etc.
+		Statement statement = null;
+		loadDatabase();
+		
+		try {
+			statement = connexion.createStatement();
+			String login = currentUser.getlogin();
+			if (!loginFriend.equals(login)) {
+				statement.executeUpdate("insert into friends (login1, login2) values ('"+login+"','"+loginFriend+")'");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+                if (statement != null)
+                    statement.close();
+                if (connexion != null)
+                    connexion.close();
+            }
+			catch (SQLException ignore) {}
+		}
+	}
+	
+	/**
+	 * @return liste des amis.
+	 */
+	public List<User> getFriends(){
+		List<User> friends = new ArrayList<>();		
+		Statement statement = null;
+		ResultSet rs = null;
+		
+		loadDatabase();
+		
+		try {
+			statement = connexion.createStatement();
+			rs = statement.executeQuery("SELECT * FROM friends join users on friends.login1=users.login where login2='"+currentUser.getlogin()+"'");
+			
+		while(rs.next()) {
+				String login = rs.getString("login");
+				String lastname = rs.getString("lastname");
+				String firstname = rs.getString("firstname");
+				String birth = rs.getString("birth");
+				boolean hascovid = rs.getBoolean("hascovid");
+				boolean isatrisk = rs.getBoolean("isatrisk");
+			
+				User user  = new User();
+				user.setuserlogin(login);
+				user.setlastname(lastname);
+				user.setfirstname(firstname);
+				user.setbirth(birth);
+				user.setcovid(hascovid);
+				user.setrisk(isatrisk);			
+				
+				friends.add(user);
+				
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+                if (rs != null)
+                    rs.close();
+                if (statement != null)
+                    statement.close();
+                if (connexion != null)
+                    connexion.close();
+            } catch (SQLException ignore) {}
+		}
+		
+		for(User u : friends)
+			System.out.println(u.getlogin());
+		
+		return friends;
+	} 
+	
 	public void modifieruser(User user) {
 		 loadDatabase();
 		 try {

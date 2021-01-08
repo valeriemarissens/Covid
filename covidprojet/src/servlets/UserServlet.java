@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bdd.Bdd;
+
 /**
  * Servlet implementation class UserServlet
  */
@@ -27,7 +29,7 @@ public class UserServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		this.getServletContext().getRequestDispatcher( "/WEB-INF/user.jsp" ).forward( request, response );
 	}
 
 	/**
@@ -35,7 +37,12 @@ public class UserServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		String chercheAmis = request.getParameter("chercheAmis");
+		
+		Bdd bdd = Bdd.getInstance();
+		if (bdd.findUser(chercheAmis)){
+			bdd.askFriend(chercheAmis);
+		}
 	}
 
 }
