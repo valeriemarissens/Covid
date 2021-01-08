@@ -211,8 +211,8 @@ public class Bdd {
 			while(rs.next()) {
 					int id= rs.getInt("idActivity");
 					String date = rs.getString("dateActivity");
-					String heuredebut = rs.getString("starthour");
-					String heurefin = rs.getString("endhour");
+					String heuredebut = rs.getString("startHour");
+					String heurefin = rs.getString("endHour");
 					String name = rs.getString("name");
 				    int lieu=rs.getInt("idPlace");
 				    
