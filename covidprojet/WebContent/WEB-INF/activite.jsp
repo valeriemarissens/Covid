@@ -21,19 +21,7 @@
   <script src="js/bootstrap.min.js"></script>
   
 </head>
-<style>
-.box {
-  display: bloc;
- 
-}
-
-.box :first-child {
-    align-self: center;
-}
-
-</style>
 <body>
-
 <br><br><br>
 
 
@@ -60,27 +48,27 @@
 <br><br><br>
  <div id="liste" class="row" style="margin-top:20px;margin-bottom:20px; border-bottom: 6px groove rgba(0, 153, 204,0.8);">
         <div class="col-sm-4">
-          <h1 style="margin:0;">Liste des utilisateurs </h1>
+          <h1 style="margin:0;">Liste des activités </h1>
         </div>
-        <div class="col-sm-offset-1 col-sm-1" style="margin-right:15px;margin-left:750px;">    
-        <div class="box">  
-     <div>      <a class="btn btn-primary" href="add" >ajouter un utilisateur </a> </div>
-            
-       
-          <div>   <a class="btn btn-primary" href="activ" > gestion d'activités </a> </div>
-        </div></div>
+        <div class="col-sm-offset-1 col-sm-1" style="margin-right:15px;margin-left:750px;">      
+            <a class="btn btn-primary" href="ajout" >ajouter une activité </a>
+           
+        </div>
     
     </div>
-
+     <br>
+      <h4 ><span class="glyphicon glyphicon-chevron-left"></span><a href="retour"> Accueil admin</a></h4> 
+          
+       <br>
     <table>
 
   <tr>
-   <th><c:out value="login"/></th>
-  <th><c:out value="lastname"/></th>
-  <th><c:out value="firstname"/></th>
-  <th><c:out value="birthday"/></th>
-  <th><c:out value="has covid ?"/></th>
-  <th><c:out value="is at risk ?"/></th>
+   <th><c:out value="idActivity"/></th>
+  <th><c:out value="date Activity"/></th>
+   <th><c:out value="heure debut"/></th>
+  <th><c:out value="heure fin"/></th>
+   <th><c:out value="nom"/></th>
+      <th><c:out value="lieu "/></th>
   
   
   <th><c:out value="Modifier"/></th>
@@ -89,25 +77,21 @@
   </tr>
 
 
-<c:forEach var="user" items="${ users }">   
+<c:forEach var="activ" items="${ activities }">   
 <tr>
- <td><c:out value="${ user.getlogin() }" /></td>
-  <td><c:out value="${ user.getlastname() }" /></td>
-  <td><c:out value="${ user.getfirstname() }" /></td>
-  <td><c:out value="${ user.getbirth() }" /></td>
-  <td><c:out value="${ user.getcovid() }" /></td>
-  <td><c:out value="${ user.getatrisk() }" /></td>
-
- 
-
-
+ <td><c:out value="${ activ.getid() }" /></td>
+  <td><c:out value="${ activ.getdate() }" /></td>
+  <td><c:out value="${ activ.gethdebut() }" /></td>
+   <td><c:out value="${ activ.gethfin() }" /></td>
+  <td><c:out value="${ activ.getname() }" /></td>
+<td><c:out value="${ activ.getlieu() }" /></td>
  <td> 
- <a class="glyphicon glyphicon-pencil" href="modifier?userlogin=<c:out value="${user.login }"/>"></a></td>
+ <a class="glyphicon glyphicon-pencil" href="modif?id=<c:out value="${activ.id }"/>"></a></td>
  </td>
 <td> 
 
 
- <a href="supprimer?userlogin=<c:out value="${user.login }"/>">  <span class="glyphicon glyphicon-trash"> </span></a></td>
+ <a href="deleteactiv?id=<c:out value="${activ.id}"/>">  <span class="glyphicon glyphicon-trash"> </span></a></td>
 
  </td>
 
@@ -118,7 +102,7 @@
     
   <br><br><br><br><br> 
     
-          
+      
        
 <footer class="text-center">
 

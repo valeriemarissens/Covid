@@ -13,7 +13,7 @@ import bdd.Bdd;
 /**
  * Servlet implementation class Admin
  */
-@WebServlet("/Admin")
+
 public class Admin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -25,20 +25,25 @@ public class Admin extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		 HttpSession session = request.getSession( false ); 
+	        
+
+		 if ( session != null )
+		 {
+		 session.invalidate(); 
+
+		
+		this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+		
+	}
+	}
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			response.setHeader("cache-control","no-cache, no-store,must-revalidate");
-		response.setHeader("Expires","0");
+			response.setHeader("Expires","0");
 				
 				String login = request.getParameter("login");
 		        String password = request.getParameter("password");
@@ -52,7 +57,7 @@ public class Admin extends HttpServlet {
 		           	this.getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
 		        }
 		        else{
-		        	String erreur="login ou mot de passe incorrecte";
+		        	String erreur="login ou mot de passe incorrect";
 		        	request.setAttribute("erreur", erreur);
 		    
 		           	this.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
