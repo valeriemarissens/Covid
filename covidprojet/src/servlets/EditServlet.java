@@ -44,8 +44,6 @@ public class EditServlet extends HttpServlet {
 		String positif = request.getParameter("positif");
 		boolean positifBool = (positif == null) ? false : true;
 		
-		System.out.println(nouveauLogin+", "+nouveauNom+", "+nouveauPrenom+", "+ nouvelleDateNaissance+", "+positifBool+" == "+positif);
-		
 		if ((nouveauLogin != "") && (nouveauNom != "") && (nouveauPrenom != "") && (nouvelleDateNaissance != "") && (positif != "")) {
 			if (areCorrect(nouveauLogin, nouveauNom, nouveauPrenom, nouvelleDateNaissance)) {
 				Bdd bdd = Bdd.getInstance();
@@ -73,8 +71,6 @@ public class EditServlet extends HttpServlet {
 		boolean nomCorrect = nom.matches(regexNom);
 		boolean prenomCorrect = prenom.matches(regexNom);
 		boolean birthCorrect = true;
-		
-		System.out.println(loginCorrect +"-"+ nomCorrect +"-"+ prenomCorrect);
 		
 		return loginCorrect && nomCorrect && prenomCorrect && birthCorrect;
 	}

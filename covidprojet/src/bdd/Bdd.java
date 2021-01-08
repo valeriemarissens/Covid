@@ -194,7 +194,56 @@ public class Bdd {
 	}
 	
 	private void updateAtRiskUsers() {
-		//todo
+		Statement statement = null;
+		ResultSet rs = null;
+		loadDatabase();
+		boolean available = true;
+		//List<Activities>
+		List activites = new ArrayList();
+		
+		try {
+			statement = connexion.createStatement();
+			String login = currentUser.getlogin();
+			StringBuilder query = new StringBuilder();
+			
+			query.append("select login from attendances ");
+			query.append("where login != '"+login+"'");
+			query.append("and idActivity in (");
+				query.append("select attendances.idActivity from users join attendances ");
+				query.append("on users.login = attendances.login ");
+				query.append("join activities on attendances.idActivity = activities.idActivity ");
+				query.append("where users.login = '"+login+"' ");
+				query.append("and CURRENT_DATE - activities.dateActivity <= 10");
+			query.append(")");
+			
+			rs = statement.executeQuery(query.toString());
+			
+			// Boucle des login qui ont été aux mêmes activités dans les 10 derniers jours
+			while(rs.next()) {
+				String loginAtRisk = rs.getString("login");
+				System.out.println("risque: "+loginAtRisk);
+				for (User u : getusers()) {
+					if (u.getlogin().equals(loginAtRisk)) {
+						statement.executeUpdate("UPDATE users SET isatrisk = 1 WHERE users.login='"+loginAtRisk+"'");
+						u.setrisk(true);
+					}
+				}
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+                if (rs != null)
+                    rs.close();
+                if (statement != null)
+                    statement.close();
+                if (connexion != null)
+                    connexion.close();
+            }
+			catch (SQLException ignore) {}
+		}
 	}
 	
 	public void editUser(String login, String nom, String prenom, String birth, boolean covidPositive) {

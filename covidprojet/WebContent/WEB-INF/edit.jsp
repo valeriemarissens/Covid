@@ -47,40 +47,26 @@
 				<h1 style="margin:0;">Modifier le profil</h1>
 	        </div>
 	    </div>
-   	
-   	
-   	<div class="row" style="margin-top: 40px;">
-    	<!-- Début informations : -->
-	    
-        <div class="col text-center" style="font-size: 10px;">
-        	<% User user = (User) session.getAttribute("user"); %>
-            <p><c:out value="Login : "/><% out.print(user.getlogin()); %></p>
-            <p><c:out value="Nom : "/><% out.print(user.getlastname()); %></p>
-            <p><c:out value="Prénom : "/><% out.print(user.getfirstname()); %></p>
-            <p><c:out value="Date de naissance : "/><% out.print(user.getbirth()); %></p>
-            <p><c:out value="Covid positif/ve : "/><% out.print(user.getcovid()); %></p>
-            <p><c:out value="A risque : "/><% out.print(user.getatrisk()); %></p>
-        </div>
-	    
-	    <!-- Fin informations -->	
+   		
 
 		<!-- Début du formulaire de modification -->
 		
+		<% User user = (User) session.getAttribute("user"); %>
 		<div class="col d-flex flex-column">
 			<form method="post" action="edit">
 				<div class="form-group">
 					<label for="nouveauLogin">Login: </label>
-					<input type="text" class="form-control" id="nouveauLogin" name="nouveauLogin" placeholder="Écrire nouveau login ici.">
+					<input type="text" class="form-control" id="nouveauLogin" name="nouveauLogin" placeholder=<% out.print(user.getlogin()); %>>
 				</div>
 				
 				<div class="form-group">
 					<label for="nouveauNom">Nom: </label>
-					<input type="text" class="form-control" id="nouveauNom" name="nouveauNom" placeholder="Écrire nouveau nom ici.">
+					<input type="text" class="form-control" id="nouveauNom" name="nouveauNom" placeholder=<% out.print(user.getlastname()); %>>
 				</div>
 				
 				<div class="form-group">
 					<label for="nouveauPrenom">Prénom: </label>
-					<input type="text" class="form-control" id="nouveauPrenom" name="nouveauPrenom" placeholder="Écrire nouveau prénom ici.">
+					<input type="text" class="form-control" id="nouveauPrenom" name="nouveauPrenom" placeholder=<% out.print(user.getfirstname()); %>>
 				</div>
 				
 				<div class="form-group">
@@ -101,7 +87,6 @@
 		
 		<!-- Fin du formulaire de modification -->   	
    	
-	  </div>
 	  <br><br><br><br><br>
 	  
 	  <h3 style="color:red;">${erreur }</h3>
