@@ -1,13 +1,13 @@
 package beans;
 
-public class activite {
+public class Activite {
 	
 	private	int id;
 	private	String date;
 	private String heuredebut;
 	private String heurefin;
 	private String name;
-   private int lieu;
+	private int lieu;
 	
 	
 	
@@ -15,7 +15,7 @@ public class activite {
 		return id;
 	}
 	
-public void setid(int id) {
+	public void setid(int id) {
 	this.id=id;
 }
 	
@@ -56,7 +56,7 @@ public void setid(int id) {
 		return lieu;
 	}
 	
-public void setlieu(int lieu) {
+	public void setlieu(int lieu) {
 	this.lieu=lieu;
 }
 	

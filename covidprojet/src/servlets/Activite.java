@@ -16,18 +16,16 @@ public class Activite extends HttpServlet {
        
   
     public Activite() {
-        super();
-       
+        super();       
     }
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("cache-control","no-cache, no-store,must-revalidate");
 		response.setHeader("Expires","0");
-		  Bdd user= new Bdd();
-		  request.setAttribute("activities", user.getactivities());
-         	this.getServletContext().getRequestDispatcher("/WEB-INF/activite.jsp").forward(request, response);
-		
+		Bdd user = Bdd.getInstance();
+		request.setAttribute("activities", user.getactivities());
+		this.getServletContext().getRequestDispatcher("/WEB-INF/activite.jsp").forward(request, response);		
 	}
 
 	

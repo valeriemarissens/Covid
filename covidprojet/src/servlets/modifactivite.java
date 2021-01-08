@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bdd.Bdd;
-import beans.activite;
+import beans.Activite;
 
 
 /**
@@ -33,7 +33,7 @@ public class modifactivite extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("cache-control","no-cache, no-store,must-revalidate");
 		response.setHeader("Expires","0");
-		Bdd tableactivities = new Bdd();
+		Bdd tableactivities = Bdd.getInstance();
 		
 HttpSession session=request.getSession();
 if(session.getAttribute("login")!=null && session!=null){
@@ -55,7 +55,7 @@ if(session.getAttribute("login")!=null && session!=null){
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("cache-control","no-cache, no-store,must-revalidate");
 		response.setHeader("Expires","0");
-		Bdd tableactivities =new Bdd();
+		Bdd tableactivities = Bdd.getInstance();
 	
 		HttpSession session=request.getSession();
 		if(session.getAttribute("login")!=null && session!=null){
@@ -67,7 +67,7 @@ if(session.getAttribute("login")!=null && session!=null){
 	
 			if(date != null && hdebut != null && hfin != null && name != null ){
 				
-			activite activite = new activite();
+			Activite activite = new Activite();
 			
 		activite.setdate(date);
 		activite.sethdebut(hdebut);

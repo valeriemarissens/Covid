@@ -47,10 +47,10 @@ public class Admin extends HttpServlet {
 				
 				String login = request.getParameter("login");
 		        String password = request.getParameter("password");
-		        Bdd user= new Bdd();
+		        Bdd user= Bdd.getInstance();
 		        boolean trouve;
-		        trouve= user.admin(login,password);
-		        if(trouve== true){
+		        trouve= user.findUser(login,password, true);
+		        if(trouve){
 		        	   HttpSession session = request.getSession();
 		        	   session.setAttribute("login", login);
 		               request.setAttribute("users", user.getusers());

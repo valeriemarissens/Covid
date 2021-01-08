@@ -43,7 +43,7 @@ public class Adduser extends HttpServlet {
 		response.setHeader("Expires","0");
 		HttpSession session=request.getSession();
 		if(session.getAttribute("login")!=null && session!=null){
-		Bdd tableusers = new Bdd();
+		Bdd tableusers = Bdd.getInstance();
 		
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");
@@ -54,11 +54,11 @@ public class Adduser extends HttpServlet {
 		
 		if(login != null && firstname != null && lastname != null && birth != null && password != null  ) {
 		User user = new User();
-		User.setuserlogin(login);
-		User.setpassword(password);
-		User.setfirstname(firstname);
-		User.setlastname(lastname);
-		User.setbirth(birth);
+		user.setuserlogin(login);
+		user.setpassword(password);
+		user.setfirstname(firstname);
+		user.setlastname(lastname);
+		user.setbirth(birth);
 	
 		
 		tableusers.ajouteruser(user);

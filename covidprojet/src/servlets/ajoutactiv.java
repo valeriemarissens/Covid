@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bdd.Bdd;
-import beans.activite;
+import beans.Activite;
 import beans.User;
 
 
@@ -47,7 +47,7 @@ public class ajoutactiv extends HttpServlet {
 		response.setHeader("Expires","0");
 		HttpSession session=request.getSession();
 		if(session.getAttribute("login")!=null && session!=null){
-		Bdd tableactivities = new Bdd();
+		Bdd tableactivities = Bdd.getInstance();
 		
 		int id = Integer.parseInt(request.getParameter("id"));
 		String date = request.getParameter("date");
@@ -57,7 +57,7 @@ public class ajoutactiv extends HttpServlet {
 	
 		
 		if(  date != null && heuredebut != null && heurefin != null && name != null  ) {
-		activite activite = new activite();
+		Activite activite = new Activite();
 		activite.setid(id);
 		activite.setdate(date);
 		activite.sethdebut(heuredebut);

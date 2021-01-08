@@ -23,7 +23,7 @@ public class Retour extends HttpServlet {
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Bdd tablesusers = new Bdd();
+		Bdd tablesusers = Bdd.getInstance();
 		request.setAttribute("users", tablesusers.getusers());
 	 	this.getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
 	}

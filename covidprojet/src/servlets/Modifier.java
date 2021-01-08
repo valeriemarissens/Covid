@@ -33,7 +33,7 @@ public class Modifier extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("cache-control","no-cache, no-store,must-revalidate");
 		response.setHeader("Expires","0");
-		Bdd tableusers = new Bdd();
+		Bdd tableusers = Bdd.getInstance();
 		
 HttpSession session=request.getSession();
 if(session.getAttribute("login")!=null && session!=null){
@@ -57,7 +57,7 @@ if(session.getAttribute("login")!=null && session!=null){
 		// TODO Auto-generated method stub
 		response.setHeader("cache-control","no-cache, no-store,must-revalidate");
 		response.setHeader("Expires","0");
-		Bdd tableusers=new Bdd();
+		Bdd tableusers= Bdd.getInstance();
 	
 		HttpSession session=request.getSession();
 		if(session.getAttribute("login")!=null && session!=null){

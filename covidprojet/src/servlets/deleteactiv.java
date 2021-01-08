@@ -31,7 +31,7 @@ public class deleteactiv extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setHeader("cache-control","no-cache, no-store,must-revalidate");
 		response.setHeader("Expires","0");
-		Bdd tableactivities = new Bdd();
+		Bdd tableactivities = Bdd.getInstance();
 		
        HttpSession session=request.getSession();
    if(session.getAttribute("login")!=null && session!=null){

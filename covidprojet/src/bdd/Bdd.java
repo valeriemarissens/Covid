@@ -10,13 +10,8 @@ import java.util.List;
 
 import com.mysql.jdbc.PreparedStatement;
 
-import beans.activite;
-
-
-
-
+import beans.Activite;
 import beans.User;
-
 
 public class Bdd {
 
@@ -27,12 +22,13 @@ public class Bdd {
 	private static final Bdd instance = new Bdd();
 	private User currentUser;
 	
-	public Bdd() {
+	private Bdd() {
 		currentUser = new User();
+		loadDatabase();
 	}
 	
 	private void loadDatabase() {
-	   
+	    // Chargement du driver
 	    try {
 	        Class.forName("com.mysql.jdbc.Driver");
 	    }
@@ -137,10 +133,8 @@ public class Bdd {
 				String lastname = rs.getString("lastname");
 				String firstname = rs.getString("firstname");
 				String birth = rs.getString("birth");
-
 				boolean hascovid = rs.getBoolean("hascovid");
 				boolean isatrisk = rs.getBoolean("isatrisk");
-
 			
 				User user  = new User();
 				user.setuserlogin(login);
@@ -148,9 +142,7 @@ public class Bdd {
 				user.setfirstname(firstname);
 				user.setbirth(birth);
 				user.setcovid(hascovid);
-
 				user.setrisk(isatrisk);			
-
 				
 				users.add(user);
 				
@@ -169,35 +161,6 @@ public class Bdd {
 		}
 		
 		return users;
-
-	}	
-	 public User getuser(String login) {
-	 User user = new User();
-	 loadDatabase();
-	 try {
-		 java.sql.PreparedStatement preparedStatement = connexion.prepareStatement("SELECT * FROM users WHERE login=?");
-		 preparedStatement.setString(1, login);
-		 ResultSet rs = preparedStatement.executeQuery();
-		if(rs.next()) {
-			
-			
-		
-			user.setuserlogin(rs.getString("login"));
-			user.setlastname(rs.getString("lastname"));
-			user.setfirstname(rs.getString("firstname"));
-			user.setbirth(rs.getString("birth"));
-			user.setcovid(rs.getBoolean("hascovid"));
-
-			user.setrisk(rs.getBoolean("isatrisk"));	
-			
-			
-		}
-		
-		
-	} catch (Exception e) {
-	}
-	 return user;
-
 	}
 	
 	private boolean loginAvailable(String login) {
@@ -240,8 +203,6 @@ public class Bdd {
 		ResultSet rs = null;
 		loadDatabase();
 		boolean available = true;
-		//List<Activities>
-		List activites = new ArrayList();
 		
 		try {
 			statement = connexion.createStatement();
@@ -338,10 +299,8 @@ public class Bdd {
 	public static Bdd getInstance() {
 		return instance;
 	}
-
 	 
-
-	 public void modifieruser(User user) {
+	public void modifieruser(User user) {
 		 loadDatabase();
 		 try {
 			java.sql.PreparedStatement preparedStatement = connexion.prepareStatement("UPDATE users SET  lastname=? ,firstname=? ,birth=? , hascovid=?  WHERE login=?");
@@ -362,8 +321,7 @@ public class Bdd {
 		}
 	 }
 	 
-
-	 public void supprimeruser(String login) {
+	public void supprimeruser(String login) {
 		 loadDatabase();
 		 try {
 			PreparedStatement preparedStatement = (PreparedStatement) connexion.prepareStatement("DELETE FROM users WHERE login=?");
@@ -375,9 +333,8 @@ public class Bdd {
 			e.printStackTrace();
 		}
 	 }
-
 	 
-	 public void ajouteruser(User user) {
+	public void ajouteruser(User user) {
 		 loadDatabase();
 		 try {
 			java.sql.PreparedStatement preparedStatement = connexion.prepareStatement("INSERT INTO users(login,password, firstname, lastname, birth) VALUES(?,?, ?, ?, ?)");
@@ -395,9 +352,8 @@ public class Bdd {
 		}
 	 }
 	 
-
-	 public List<activite> getactivities(){
-			List<activite> activities = new ArrayList<activite>();
+	public List<Activite> getactivities(){
+			List<Activite> activities = new ArrayList<Activite>();
 			Statement statement = null;
 			ResultSet rs = null;
 			
@@ -416,7 +372,7 @@ public class Bdd {
 				    int lieu=rs.getInt("idPlace");
 				    
 				   
-				activite activite = new activite();
+				Activite activite = new Activite();
 					activite.setid(id);
 					activite.setdate(date);
 					activite.sethdebut(heuredebut);
@@ -445,9 +401,8 @@ public class Bdd {
 			
 			return activities;
 		}	 
-	 
-	 
-	 public void ajouteractivity(activite activite ) {
+	 	 
+	public void ajouteractivity(Activite activite ) {
 		 loadDatabase();
 		 try {
 			PreparedStatement preparedStatement = (PreparedStatement) connexion.prepareStatement("INSERT INTO activities(idActivity,dateActivity,startHour, endHour, name) VALUES(?,?, ?, ?, ?)");
@@ -465,8 +420,6 @@ public class Bdd {
 		}
 	 }
 	 
-	 
-
 	 public void supprimeractivitie(int id) {
 		 loadDatabase();
 		 try {
@@ -480,8 +433,8 @@ public class Bdd {
 		}
 	 }
 	 
-	 public activite getactivite(int id) {
-		 activite  activite = new activite();
+	 public Activite getactivite(int id) {
+		 Activite  activite = new Activite();
 		 loadDatabase();
 		 try {
 			 PreparedStatement preparedStatement = (PreparedStatement) connexion.prepareStatement("SELECT * FROM activities WHERE idActivity=?");
@@ -505,7 +458,8 @@ public class Bdd {
 		}
 		 return  activite;
 	 }
-		 public void modifieractivite(activite activite) {
+
+	 public void modifieractivite(Activite activite) {
 			 loadDatabase();
 			 try {
 				PreparedStatement preparedStatement = (PreparedStatement) connexion.prepareStatement("UPDATE activities SET  dateActivity=? ,startHour=? ,endHour=? , name=?  WHERE idActivity=?");
@@ -524,6 +478,35 @@ public class Bdd {
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-		 }
+	 }
+	 
+	 public User getuser(String login) {
+		 User user = new User();
+		 loadDatabase();
+		 try {
+			 java.sql.PreparedStatement preparedStatement = connexion.prepareStatement("SELECT * FROM users WHERE login=?");
+			 preparedStatement.setString(1, login);
+			 ResultSet rs = preparedStatement.executeQuery();
+			if(rs.next()) {
+				
+				
+			
+				user.setuserlogin(rs.getString("login"));
+				user.setlastname(rs.getString("lastname"));
+				user.setfirstname(rs.getString("firstname"));
+				user.setbirth(rs.getString("birth"));
+				user.setcovid(rs.getBoolean("hascovid"));
+
+				user.setrisk(rs.getBoolean("isatrisk"));	
+				
+				
+			}
+			
+			
+		} catch (Exception e) {
+		}
+		 return user;
+
+		}
 
 }
