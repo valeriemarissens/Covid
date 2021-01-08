@@ -1,13 +1,15 @@
 package beans;
 
-public class User {
+public class user {
 	
 	private	String login;
+	private	String password;
 	private	String lastname ;
 	private String firstname ;
 	private String birth ;
 	private boolean hascovid ;
 	private boolean isatrisk ;
+	
 	
 	
 	public String getlogin() {
@@ -16,6 +18,14 @@ public class User {
 	
 	public void setuserlogin(String login) {
 		this.login = login;
+	}
+	
+	public String getpassword() {
+		return password;
+	}
+	
+	public void setpassword(String password ) {
+		this.password=password;
 	}
 	
 	public String getlastname() {
