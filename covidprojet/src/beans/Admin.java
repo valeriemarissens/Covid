@@ -3,6 +3,7 @@ package beans;
 public class Admin {
 	private String login;
 	private String password;
+	
 	public String getLogin() {
 		return login;
 	}

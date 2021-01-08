@@ -125,7 +125,7 @@
   <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
     <span class="glyphicon glyphicon-chevron-up"></span>
   </a><br><br>
-  <p>rejoingez-nous sur!<br>tel:0783881980<br>mail:www.covid.fr</p> 
+  <p>rejoignez-nous sur: <br>tél: 0783881980<br>mail: www.covid.fr</p> 
       
       </footer>
 <script src="http://code.jquery.com/jquery.min.js"></script>

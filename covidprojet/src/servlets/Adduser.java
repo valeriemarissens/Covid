@@ -11,7 +11,8 @@ import javax.servlet.http.HttpSession;
 
 
 import bdd.Bdd;
-import beans.user;
+import beans.User;
+
 
 
 
@@ -52,12 +53,12 @@ public class Adduser extends HttpServlet {
 	
 		
 		if(login != null && firstname != null && lastname != null && birth != null && password != null  ) {
-		user user = new user();
-		user.setuserlogin(login);
-		user.setpassword(password);
-		user.setfirstname(firstname);
-		user.setlastname(lastname);
-		user.setbirth(birth);
+		User user = new User();
+		User.setuserlogin(login);
+		User.setpassword(password);
+		User.setfirstname(firstname);
+		User.setlastname(lastname);
+		User.setbirth(birth);
 	
 		
 		tableusers.ajouteruser(user);

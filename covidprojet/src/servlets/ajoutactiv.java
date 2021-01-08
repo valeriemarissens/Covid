@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import bdd.Bdd;
 import beans.activite;
-import beans.user;
+import beans.User;
 
 
 @WebServlet("/ajoutactiv")

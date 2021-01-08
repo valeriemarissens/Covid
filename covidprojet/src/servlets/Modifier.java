@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bdd.Bdd;
-import beans.user;
+import beans.User;
 
 /**
  * Servlet implementation class Modifier
@@ -68,7 +68,7 @@ if(session.getAttribute("login")!=null && session!=null){
 			boolean hascovid=request.getParameter("hascovid") != null;
 	
 			if(login != null && lastname != null && firstname != null && birth != null  ) {
-			user user = new user();
+			User user = new User();
 			user.setuserlogin(login);
 			user.setlastname(lastname);
 			user.setfirstname(firstname);

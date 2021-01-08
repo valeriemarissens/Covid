@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import bdd.Bdd;
 import beans.activite;
-import beans.user;
+
 
 /**
  * Servlet implementation class modifactivite

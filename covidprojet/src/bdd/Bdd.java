@@ -2,23 +2,35 @@ package bdd;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import beans.activite;
-import beans.user;
+import com.mysql.jdbc.PreparedStatement;
 
+import beans.activite;
+
+
+
+
+import beans.User;
 
 
 public class Bdd {
 
 	private Connection connexion;
+	/**
+	 * Singleton : instance partagée.
+	 */
+	private static final Bdd instance = new Bdd();
+	private User currentUser;
 	
-
+	public Bdd() {
+		currentUser = new User();
+	}
+	
 	private void loadDatabase() {
 	   
 	    try {
@@ -34,22 +46,33 @@ public class Bdd {
 	        e.printStackTrace();
 	    }
     }
-	 
-	public boolean admin (String login, String password){
+	 	
+	/**
+	 * Trouve un user ou admin.
+	 * 
+	 * @param login login de l'utilisateur.
+	 * @param password mdp.
+	 * @param isAdmin vrai s'il est administrateur.
+	 * @return
+	 */
+	public boolean findUser (String login, String password, boolean isAdmin){
 		Statement statement;
 		ResultSet rs;
 		loadDatabase();
-		boolean trouve =false;
+		boolean trouve = false;
+		int adminInt = isAdmin ? 1 : 0;
 		
 		try {
 			statement = connexion.createStatement();
-			rs = statement.executeQuery("SELECT * FROM users where login='"+login+"' and password='"+password+"'");
+			rs = statement.executeQuery("SELECT * FROM users where login='"+login+"' and password='"+password+"' and isadmin='"+adminInt+"'");
 			
 			while(rs.next()) {
-				if(rs.getString("login")!="" && rs.getString("password")!=""){
-					trouve=true;
-				}else{
-					trouve=false;
+				if((rs.getString("login") != "") && (rs.getString("password") != "")){
+					trouve = true;
+					this.setCurrentUser(rs);
+				}
+				else{
+					trouve = false;
 			}
 		}
 		connexion.close();	 
@@ -57,15 +80,49 @@ public class Bdd {
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-			return trouve;
+		
+		return trouve;
 	}
-		
-		
-		
-		
+	
+	/**
+	 * Met à jour l'utilisateur qui est en ce moment dans le site.
+	 * 
+	 * @param rs résultat de la requête sql.
+	 */
+	private void setCurrentUser(ResultSet rs) {			
+		try {
+			if (currentUser == null)
+				currentUser = new User();
+			
+			String login = rs.getString("login");
+			String lastname = rs.getString("lastname");
+			String firstname = rs.getString("firstname");
+			String birth = rs.getString("birth");
+			boolean hascovid = rs.getBoolean("hascovid");
+			boolean isatrisk = rs.getBoolean("isatrisk");
+			
+			currentUser.setuserlogin(login);
+			currentUser.setlastname(lastname);
+			currentUser.setfirstname(firstname);
+			currentUser.setbirth(birth);
+			currentUser.setcovid(hascovid);
+			currentUser.setrisk(isatrisk);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @return l'utilisateur qui est actuellement dans le site.
+	 */
+	public User getCurrentUser() {
+		return this.currentUser;
+	}
+			
 	// retourner la liste des utilisateurs 	
-	public List<user> getusers(){
-		List<user> users = new ArrayList<user>();
+	public List<User> getusers(){
+		List<User> users = new ArrayList<User>();
 		Statement statement = null;
 		ResultSet rs = null;
 		
@@ -85,7 +142,7 @@ public class Bdd {
 				boolean isatrisk = rs.getBoolean("isatrisk");
 
 			
-				user user  = new user();
+				User user  = new User();
 				user.setuserlogin(login);
 				user.setlastname(lastname);
 				user.setfirstname(firstname);
@@ -108,17 +165,17 @@ public class Bdd {
                     statement.close();
                 if (connexion != null)
                     connexion.close();
-            } catch (SQLException ignore) {
-            }
+            } catch (SQLException ignore) {}
 		}
 		
 		return users;
+
 	}	
-	 public user getuser(String login) {
-	 user user = new user();
+	 public User getuser(String login) {
+	 User user = new User();
 	 loadDatabase();
 	 try {
-		 PreparedStatement preparedStatement = connexion.prepareStatement("SELECT * FROM users WHERE login=?");
+		 java.sql.PreparedStatement preparedStatement = connexion.prepareStatement("SELECT * FROM users WHERE login=?");
 		 preparedStatement.setString(1, login);
 		 ResultSet rs = preparedStatement.executeQuery();
 		if(rs.next()) {
@@ -140,12 +197,105 @@ public class Bdd {
 	} catch (Exception e) {
 	}
 	 return user;
+
+	}
+	
+	private boolean loginAvailable(String login) {
+		Statement statement = null;
+		ResultSet rs = null;
+		loadDatabase();
+		boolean available = true;
+		
+		try {
+			statement = connexion.createStatement();
+			rs = statement.executeQuery("SELECT * FROM users");
+			
+		while(rs.next()) {
+				String loginUsed = rs.getString("login");
+				if (login.equals(loginUsed)) {
+					available = false;
+				}				
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+                if (rs != null)
+                    rs.close();
+                if (statement != null)
+                    statement.close();
+                if (connexion != null)
+                    connexion.close();
+            }
+			catch (SQLException ignore) {}
+		}
+		
+		return available;
+	}
+	
+	private void updateAtRiskUsers() {
+		//todo
+	}
+	
+	public void editUser(String login, String nom, String prenom, String birth, boolean covidPositive) {
+		Statement statement = null;
+		loadDatabase();
+		
+		try {
+			statement = connexion.createStatement();
+			if ((login != currentUser.getlogin()) && loginAvailable(login)) {
+				statement.executeUpdate("UPDATE users SET login = '"+login+"' WHERE users.login='"+login+"'");
+				currentUser.setuserlogin(login);
+			}
+			if (nom != currentUser.getlastname()) {
+				statement.executeUpdate("UPDATE users SET lastname = '"+nom+"' WHERE users.login='"+login+"'");
+				currentUser.setlastname(nom);
+			}
+			if (prenom != currentUser.getfirstname()) {
+				statement.executeUpdate("UPDATE users SET firstname = '"+prenom+"' WHERE users.login='"+login+"'");
+				currentUser.setfirstname(prenom);
+			}
+			if (birth != currentUser.getbirth()) {
+				statement.executeUpdate("UPDATE users SET birth = '"+birth+"' WHERE users.login='"+login+"'");
+				currentUser.setbirth(birth);
+			}
+			boolean isAlreadyPositive = Boolean.parseBoolean(currentUser.getcovid());
+			if (covidPositive && (!isAlreadyPositive)) {
+				statement.executeUpdate("UPDATE users SET hascovid = 1 WHERE users.login='"+login+"'");
+				currentUser.setcovid(covidPositive);
+				this.updateAtRiskUsers();
+			}
+			if (!covidPositive && isAlreadyPositive) {
+				currentUser.setcovid(covidPositive);
+				statement.executeUpdate("UPDATE users SET hascovid = 0 WHERE users.login='"+login+"'");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+                if (statement != null)
+                    statement.close();
+                if (connexion != null)
+                    connexion.close();
+            }
+			catch (SQLException ignore) {}
+		}
+	} 
+	
+	public static Bdd getInstance() {
+		return instance;
+	}
+
 	 
-}
-	 public void modifieruser(user user) {
+
+	 public void modifieruser(User user) {
 		 loadDatabase();
 		 try {
-			PreparedStatement preparedStatement = connexion.prepareStatement("UPDATE users SET  lastname=? ,firstname=? ,birth=? , hascovid=?  WHERE login=?");
+			java.sql.PreparedStatement preparedStatement = connexion.prepareStatement("UPDATE users SET  lastname=? ,firstname=? ,birth=? , hascovid=?  WHERE login=?");
 			
 		
 			preparedStatement.setString(1, user.getlastname());
@@ -167,7 +317,7 @@ public class Bdd {
 	 public void supprimeruser(String login) {
 		 loadDatabase();
 		 try {
-			PreparedStatement preparedStatement = connexion.prepareStatement("DELETE FROM users WHERE login=?");
+			PreparedStatement preparedStatement = (PreparedStatement) connexion.prepareStatement("DELETE FROM users WHERE login=?");
 		
 			preparedStatement.setString(1, login);
 			preparedStatement.executeUpdate();
@@ -178,10 +328,10 @@ public class Bdd {
 	 }
 
 	 
-	 public void ajouteruser(user user) {
+	 public void ajouteruser(User user) {
 		 loadDatabase();
 		 try {
-			PreparedStatement preparedStatement = connexion.prepareStatement("INSERT INTO users(login,password, firstname, lastname, birth) VALUES(?,?, ?, ?, ?)");
+			java.sql.PreparedStatement preparedStatement = connexion.prepareStatement("INSERT INTO users(login,password, firstname, lastname, birth) VALUES(?,?, ?, ?, ?)");
 			preparedStatement.setString(1, user.getlogin());
 			preparedStatement.setString(2, user.getpassword());
 			preparedStatement.setString(3, user.getfirstname());
@@ -251,7 +401,7 @@ public class Bdd {
 	 public void ajouteractivity(activite activite ) {
 		 loadDatabase();
 		 try {
-			PreparedStatement preparedStatement = connexion.prepareStatement("INSERT INTO activities(idActivity,dateActivity,startHour, endHour, name) VALUES(?,?, ?, ?, ?)");
+			PreparedStatement preparedStatement = (PreparedStatement) connexion.prepareStatement("INSERT INTO activities(idActivity,dateActivity,startHour, endHour, name) VALUES(?,?, ?, ?, ?)");
 			preparedStatement.setInt(1,activite.getid());
 			preparedStatement.setString(2, activite.getdate());
 			preparedStatement.setString(3, activite.gethdebut());
@@ -271,7 +421,7 @@ public class Bdd {
 	 public void supprimeractivitie(int id) {
 		 loadDatabase();
 		 try {
-			PreparedStatement preparedStatement = connexion.prepareStatement("DELETE FROM activities WHERE idActivity=?");
+			PreparedStatement preparedStatement = (PreparedStatement) connexion.prepareStatement("DELETE FROM activities WHERE idActivity=?");
 		
 			preparedStatement.setInt(1, id);
 			preparedStatement.executeUpdate();
@@ -285,7 +435,7 @@ public class Bdd {
 		 activite  activite = new activite();
 		 loadDatabase();
 		 try {
-			 PreparedStatement preparedStatement = connexion.prepareStatement("SELECT * FROM activities WHERE idActivity=?");
+			 PreparedStatement preparedStatement = (PreparedStatement) connexion.prepareStatement("SELECT * FROM activities WHERE idActivity=?");
 			 preparedStatement.setInt(1, id);
 			 ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next()) {
@@ -309,7 +459,7 @@ public class Bdd {
 		 public void modifieractivite(activite activite) {
 			 loadDatabase();
 			 try {
-				PreparedStatement preparedStatement = connexion.prepareStatement("UPDATE activities SET  dateActivity=? ,startHour=? ,endHour=? , name=?  WHERE idActivity=?");
+				PreparedStatement preparedStatement = (PreparedStatement) connexion.prepareStatement("UPDATE activities SET  dateActivity=? ,startHour=? ,endHour=? , name=?  WHERE idActivity=?");
 				
 			
 				preparedStatement.setString(1, activite.getdate());
